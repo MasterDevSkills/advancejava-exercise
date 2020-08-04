@@ -25,30 +25,36 @@
 package com.masterdevskills.cha1.ext1;
 
 
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class LambdaExpression1 {
 
-	//TODO 1:  Write a lambda expression using Predicate<String> to check if a string has more then 5 characters or not
-	public boolean checkMoreThan5Chars(String value) {
+	/**
+	 * TODO 1:  Write a lambda expression using Predicate<String> to check if a string has more then 5 characters or not
+	 *
+	 * @param value given value
+	 * @see Predicate<String>
+	 */
+	public static boolean checkMoreThan5Chars(String value) {
 
-		Predicate<String> noMorThan5 = text -> text.length() > 5;
-
-		return noMorThan5.test(value);
+		throw new RuntimeException("NotImplementedYet");
 	}
 
-	//TODO 2: Write a lambda expression using Predicate<String> to check if string is empty or not
-	public boolean isStringEmpty(String value) {
-		Predicate<String> isEmpty = text -> text.isEmpty();
-
-		return isEmpty.test(value);
+	/* TODO 2: Write a lambda expression using Predicate<String> to check if string is empty or not
+	 * @param value given value
+	 * @see Predicate<String>
+	 */
+	public static boolean isStringEmpty(String value) {
+		throw new RuntimeException("NotImplementedYet");
 	}
 
-	//TODO 3:  Write lambda expression using Function<String, String> to converter a text to uppercase
-	public String convertToUpperCase(String text) {
-		Function<String, String> converter = x -> x.toUpperCase();
-
-		return converter.apply(text);
+	/**
+	 * TODO 3:  Write lambda expression using Function<String, String> to converter a text to uppercase
+	 *
+	 * @param text given value
+	 * @see Predicate<String>
+	 */
+	public static String convertToUpperCase(String text) {
+		throw new RuntimeException("NotImplementedYet");
 	}
 }
