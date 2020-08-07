@@ -34,34 +34,33 @@ import java.util.function.Predicate;
 
 public class FileProcessor {
 
-	/**
-	 * Add your code in the following method
-	 * This method is supposed to read text from given file
-	 * and return the all the lines as a List of string
-	 * TODO: After reading file
-	 *
-	 * @param fileName the filename
-	 *
-	 * hints:
-	 * @see List#removeIf(Predicate)
-	 * */
-	public List<String> readFileFrom(String fileName) {
+    /**
+     * Add your code in the following method
+     * This method is supposed to read text from given file
+     * and return the all the lines as a List of string
+     *
+     * @param fileName the filename
+     *                 <p>
+     *                 hints:
+     * @see List#removeIf(Predicate)
+     */
+    public List<String> readFileFrom(String fileName) {
 
-		throw new RuntimeException("Not Yet Implemented");
-	}
+        throw new RuntimeException("Not Yet Implemented");
+    }
 
-	/**
-	 * TODO: Implement this method that takes a list of string and write in a file
-	 *
-	 * @param lines list of string
-	 * @param fileName fileName to write
-	 *
-	 * hints
-	 * @see String#join(CharSequence, CharSequence...)
-	 * */
-	public void writeToFile(List<String> lines, String fileName) {
+    /**
+     * TODO: Implement this method that takes a list of string and write in a file
+     *
+     * @param lines    list of string
+     * @param fileName fileName to write
+     *                 <p>
+     *                 hints
+     * @see String#join(CharSequence, CharSequence...)
+     */
+    public void writeToFile(List<String> lines, String fileName) {
 
-		throw new RuntimeException("Not Yet Implemented");
-	}
+        throw new RuntimeException("Not Yet Implemented");
+    }
 }
 
