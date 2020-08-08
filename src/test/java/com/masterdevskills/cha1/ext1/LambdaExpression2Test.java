@@ -32,6 +32,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * @author A N M Bazlur Rahman @bazlur_rahman
  * @since 04 August 2020
@@ -52,7 +54,7 @@ class LambdaExpression2Test {
 						.filter(path -> path.endsWith("Executable.class"))
 						.findAny();
 
-		//assertTrue(executable.isPresent(), "Functional Interface Executable don't exist in classpath");
+		assertTrue(executable.isPresent(), "Functional Interface Executable don't exist in classpath");
 
 		var spy = Mockito.spy(new LambdaExpression2());
 		spy.run();

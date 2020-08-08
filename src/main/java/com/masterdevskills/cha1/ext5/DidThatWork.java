@@ -1,6 +1,6 @@
 package com.masterdevskills.cha1.ext5;
 
-public class Main {
+public class DidThatWork {
     public static void main(String[] args) {
         Log logger = Logger.getLogger();
 
