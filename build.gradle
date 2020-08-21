@@ -20,6 +20,8 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.2'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 
+    implementation 'com.h2database:h2:1.4.194'
+
     implementation 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 

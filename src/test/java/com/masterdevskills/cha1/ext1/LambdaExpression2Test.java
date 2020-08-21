@@ -58,7 +58,7 @@ class LambdaExpression2Test {
 
 		var spy = Mockito.spy(new LambdaExpression2());
 		spy.run();
-		Mockito.verify(spy, Mockito.times(1)).executionTime();
+		Mockito.verify(spy, Mockito.times(1)).run();
 	}
 
 	private Stream<? extends Path> walkThrough(File file) {

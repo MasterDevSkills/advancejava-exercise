@@ -4,61 +4,61 @@ import java.util.function.Supplier;
 
 //TODO: implement info, trace, debug, warn
 public class Logger implements Log {
-    private static final String DELIM = "{}";
-    private volatile boolean enabled;
+	private static final String DELIM = "{}";
+	private volatile boolean enabled = false;
 
-    private Logger() {
-    }
+	private Logger() {
+	}
 
-    public static Log getLogger() {
-        return new Logger();
-    }
+	public static Log getLogger() {
+		return new Logger();
+	}
 
-    @Override
-    public boolean isLoggable() {
-        return enabled;
-    }
+	@Override
+	public boolean isLoggable() {
+		return enabled;
+	}
 
-    @Override
-    public void enableLogging() {
-        this.enabled = true;
-    }
+	@Override
+	public void enableLogging() {
+		this.enabled = true;
+	}
 
-    @Override
-    public void info(final String message, final Object... params) {
-        if (isLoggable()) {
-            System.out.println(formatMessage(message, params));
-        }
-    }
+	@Override
+	public void info(final String message, final Object... params) {
+		if (isLoggable()) {
+			System.out.println(formatMessage(message, params));
+		}
+	}
 
-    private String formatMessage(final String message, final Object[] params) {
-        if (message != null && params != null) {
-            StringBuilder sbMessage = new StringBuilder(message);
+	private String formatMessage(final String message, final Object[] params) {
+		if (message != null && params != null) {
+			StringBuilder sbMessage = new StringBuilder(message);
 
-            for (Object arg : params) {
-                int index = sbMessage.indexOf(DELIM);
-                if (index == -1) {
-                    break;
-                }
-                sbMessage.replace(index, index + DELIM.length(), arg == null ? "null" : arg.toString());
-            }
+			for (Object arg : params) {
+				int index = sbMessage.indexOf(DELIM);
+				if (index == -1) {
+					break;
+				}
+				sbMessage.replace(index, index + DELIM.length(), arg == null ? "null" : arg.toString());
+			}
 
-            return sbMessage.toString();
-        }
-        return message;
-    }
+			return sbMessage.toString();
+		}
+		return message;
+	}
 
-    @Override
-    public void info(final String message, final Supplier<Object[]> params) {
-        if (isLoggable()) {
-            System.out.println(formatMessage(message, params.get()));
-        }
-    }
+	@Override
+	public void info(final String message, final Supplier<Object[]> params) {
+		if (isLoggable()) {
+			System.out.println(formatMessage(message, params.get()));
+		}
+	}
 
-    public Logger setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-        return this;
-    }
+	public Logger setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+		return this;
+	}
 }
 
 

@@ -27,4 +27,9 @@ public interface Deck {
 
     Map<Integer, Deck> deal(int players, int numberOfCards)
             throws IllegalArgumentException;
+
+
+    default void sortByKing(){
+
+    }
 }

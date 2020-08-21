@@ -1,34 +1,37 @@
 package com.masterdevskills.cha1.ext5;
 
 public class DidThatWork {
-    public static void main(String[] args) {
-        Log logger = Logger.getLogger();
+	public static void main(String[] args) {
+		Log logger = Logger.getLogger();
 
-        logger.enableLogging();
-        User user = new User("Bazlur", "Rahman");
-        // logger.info("user status:  {}", getUserStatus(user));
-        logger.info("user status:  {}", () -> new String[]{getUserStatus(user)});
-    }
+		//logger.enableLogging();
+		User user = new User("Bazlur", "Rahman");
+		//logger.info("user status:  {}", getUserStatus(user));
 
-    private static String getUserStatus(final User user) {
-        System.out.println("Preparing user status");
+//		logger.info("message: {}", getUserStatus(user));
 
-        return user.toString();
-    }
+		logger.info("user status:  {}", () -> new String[]{getUserStatus(user)});
+	}
 
-    static class User {
-        final String firstName;
-        final String lastName;
+	private static String getUserStatus(final User user) {
+		System.out.println("Preparing user status");
 
-        public User(final String firstName, final String lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
+		return user.toString();
+	}
 
-        @Override
-        public String toString() {
+	static class User {
+		final String firstName;
+		final String lastName;
 
-            return firstName + " " + lastName;
-        }
-    }
+		public User(final String firstName, final String lastName) {
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
+
+		@Override
+		public String toString() {
+
+			return firstName + " " + lastName;
+		}
+	}
 }
