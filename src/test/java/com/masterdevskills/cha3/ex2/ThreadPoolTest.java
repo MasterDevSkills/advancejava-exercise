@@ -1,12 +1,14 @@
 package com.masterdevskills.cha3.ex2;
 
+import com.masterdevskills.cha3.ReflectionUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
+import static com.masterdevskills.cha3.SleepUtil.quietlySleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -19,7 +21,7 @@ class ThreadPoolTest {
 		var latch = new CountDownLatch(1);
 		pool.submit(() -> {
 			try {
-				sleep(10_000);
+				quietlySleep(10_000);
 			} finally {
 				latch.countDown();
 			}
@@ -41,7 +43,7 @@ class ThreadPoolTest {
 		var start = System.currentTimeMillis();
 		for (int i = 0; i < 20; i++) {
 			threadPool.submit(() -> {
-				sleep(1000);
+				quietlySleep(1000);
 				countDownLatch.countDown();
 			});
 		}
@@ -58,20 +60,16 @@ class ThreadPoolTest {
 
 	@Test
 	public void testIfBlockingQueueUsed() {
-		boolean foundBlockingQueueField = false;
-		for (var field : ThreadPool.class.getDeclaredFields()) {
-			if (BlockingQueue.class.isAssignableFrom(field.getType())) {
-				foundBlockingQueueField = true;
-			}
-		}
-		assertTrue("Expected BlockingQueue to be used in ThreadPool", foundBlockingQueueField);
+		var usedBlockingQueue = Stream.of(ThreadPool.class.getDeclaredFields())
+						.anyMatch(field -> ThreadPool.class.isAssignableFrom(field.getType()));
+		assertTrue("Expected BlockingQueue to be used in ThreadPool", usedBlockingQueue);
 	}
 
 	@Test
-	public void testSpuriousWakeUpHandledCorrectly() throws InterruptedException, IllegalAccessException {
+	public void testSpuriousWakeUpHandledCorrectly() throws InterruptedException {
 		var pool = new ThreadPool(10);
-		sleep(100);
-		var list = findFieldValue(pool, List.class);
+		quietlySleep(100);
+		var list = ReflectionUtil.findFieldValue(pool, List.class);
 		for (int i = 0; i < 20; i++) {
 			synchronized (list) {
 				list.notifyAll();
@@ -79,22 +77,4 @@ class ThreadPoolTest {
 		}
 		runThreadPoolFunctionality();
 	}
-
-	private <E> E findFieldValue(ThreadPool pool, Class<E> fieldType) throws IllegalAccessException {
-		for (var field : pool.getClass().getDeclaredFields()) {
-			if (fieldType.isAssignableFrom(field.getType())) {
-				field.setAccessible(true);
-				return fieldType.cast(field.get(pool));
-			}
-		}
-		throw new IllegalArgumentException("Field of type " + fieldType + " not found");
-	}
-
-	private void sleep(int milis) {
-		try {
-			Thread.sleep(milis);
-		} catch (InterruptedException ignored) {
-		}
-	}
-
 }

@@ -24,8 +24,8 @@ public class ThreadPool {
 
 	}
 
-	private class Worker extends Thread {
-		public Worker(ThreadGroup group, String name) {
+	private class Job extends Thread {
+		public Job(ThreadGroup group, String name) {
 			super(group, name);
 		}
 

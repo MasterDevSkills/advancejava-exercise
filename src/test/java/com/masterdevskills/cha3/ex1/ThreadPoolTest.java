@@ -1,11 +1,13 @@
 package com.masterdevskills.cha3.ex1;
 
+import com.masterdevskills.cha3.ReflectionUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static com.masterdevskills.cha3.SleepUtil.quietlySleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -18,7 +20,7 @@ class ThreadPoolTest {
 		var latch = new CountDownLatch(1);
 		pool.submit(() -> {
 			try {
-				sleep(10_000);
+				quietlySleep(10_000);
 			} finally {
 				latch.countDown();
 			}
@@ -40,7 +42,7 @@ class ThreadPoolTest {
 		var start = System.currentTimeMillis();
 		for (int i = 0; i < 20; i++) {
 			threadPool.submit(() -> {
-				sleep(1000);
+				quietlySleep(1000);
 				countDownLatch.countDown();
 			});
 		}
@@ -58,7 +60,7 @@ class ThreadPoolTest {
 	@Test
 	public void testSynchronizationOnList() throws IllegalAccessException, InterruptedException {
 		var pool = new ThreadPool(10);
-		var list = findFieldValue(pool, List.class);
+		var list = ReflectionUtil.findFieldValue(pool, List.class);
 
 		synchronized (list) {
 			var thread = new Thread(() -> {
@@ -66,7 +68,7 @@ class ThreadPoolTest {
 			});
 			thread.start();
 			thread.join(100);
-			assertTrue("In submit(), we expected the pool to be synchronizing list access using the list object as a monitor lock", thread.isAlive());
+			assertTrue("submit() method, the pool has to be synchronizing over list", thread.isAlive());
 		}
 
 		synchronized (list) {
@@ -75,7 +77,7 @@ class ThreadPoolTest {
 			});
 			thread.start();
 			thread.join(100);
-			assertTrue("In getRunQueueLength(), we expected the pool to be synchronizing list access using the list object as a monitor lock", thread.isAlive());
+			assertTrue("getRunQueueLength(), the pool has to be synchronizing over list", thread.isAlive());
 		}
 		pool.shutdown();
 	}
@@ -83,8 +85,8 @@ class ThreadPoolTest {
 	@Test
 	public void testSpuriousWakeUpHandledCorrectly() throws InterruptedException, IllegalAccessException {
 		var pool = new ThreadPool(10);
-		sleep(100);
-		var list = findFieldValue(pool, List.class);
+		quietlySleep(100);
+		var list = ReflectionUtil.findFieldValue(pool, List.class);
 		for (int i = 0; i < 20; i++) {
 			synchronized (list) {
 				list.notifyAll();
@@ -92,22 +94,4 @@ class ThreadPoolTest {
 		}
 		runThreadPoolFunciotnaltiy();
 	}
-
-	private <E> E findFieldValue(ThreadPool pool, Class<E> fieldType) throws IllegalAccessException {
-		for (var field : pool.getClass().getDeclaredFields()) {
-			if (fieldType.isAssignableFrom(field.getType())) {
-				field.setAccessible(true);
-				return fieldType.cast(field.get(pool));
-			}
-		}
-		throw new IllegalArgumentException("Field of type " + fieldType + " not found");
-	}
-
-	private void sleep(int milis) {
-		try {
-			Thread.sleep(milis);
-		} catch (InterruptedException ignored) {
-		}
-	}
-
 }

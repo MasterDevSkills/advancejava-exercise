@@ -1,6 +1,5 @@
 package com.masterdevskills.cha3.ext3;
 
-import com.masterdevskills.cha3.ex2.ThreadPool;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,6 +7,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static com.masterdevskills.cha3.ReflectionUtil.findFieldValue;
+import static com.masterdevskills.cha3.SleepUtil.quietlySleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -20,12 +21,12 @@ class ThreadPoolTest {
 		var latch = new CountDownLatch(1);
 		pool.submit(() -> {
 			try {
-				sleep(10_000);
+				quietlySleep(10_000);
 			} finally {
 				latch.countDown();
 			}
 		});
-		Thread.sleep(1000);
+		quietlySleep(1000);
 		pool.shutdown();
 		boolean noTimeout = latch.await(100, TimeUnit.MILLISECONDS);
 		assertTrue("timeout occurred - did not shutdown the threads in time?", noTimeout);
@@ -42,7 +43,7 @@ class ThreadPoolTest {
 		var start = System.currentTimeMillis();
 		for (int i = 0; i < 20; i++) {
 			threadPool.submit(() -> {
-				sleep(1000);
+				quietlySleep(1000);
 				countDownLatch.countDown();
 			});
 		}
@@ -71,7 +72,7 @@ class ThreadPoolTest {
 	@Test
 	public void testSpuriousWakeUpHandledCorrectly() throws InterruptedException, IllegalAccessException {
 		var pool = new com.masterdevskills.cha3.ex2.ThreadPool(10);
-		sleep(100);
+		quietlySleep(100);
 		var list = findFieldValue(pool, List.class);
 		for (int i = 0; i < 20; i++) {
 			synchronized (list) {
@@ -81,21 +82,5 @@ class ThreadPoolTest {
 		runThreadPoolFunctionality();
 	}
 
-	private <E> E findFieldValue(ThreadPool pool, Class<E> fieldType) throws IllegalAccessException {
-		for (var field : pool.getClass().getDeclaredFields()) {
-			if (fieldType.isAssignableFrom(field.getType())) {
-				field.setAccessible(true);
-				return fieldType.cast(field.get(pool));
-			}
-		}
-		throw new IllegalArgumentException("Field of type " + fieldType + " not found");
-	}
-
-	private void sleep(int milis) {
-		try {
-			Thread.sleep(milis);
-		} catch (InterruptedException ignored) {
-		}
-	}
 
 }
