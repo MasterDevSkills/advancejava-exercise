@@ -1,6 +1,8 @@
 package com.masterdevskills.cha3.ext0;
 
 
+
+//TODO make it threadsafe
 public class ThreadSafeCounter {
 	private int count;
 
